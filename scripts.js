@@ -4,7 +4,6 @@
 const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-
 // ---------------------------------------------------------
 // YOUTUBE BACKGROUND VIDEO
 // ---------------------------------------------------------
@@ -44,6 +43,9 @@ function onYouTubeIframeAPIReady() {
         e.target.playVideo();
       },
       onStateChange: (e) => {
+        if (e.data === YT.PlayerState.PLAYING) {
+          document.body.classList.add("loaded");
+        }
         if (e.data === YT.PlayerState.PLAYING && !loopTick) {
           loopTick = setInterval(() => {
             if (player.getCurrentTime() >= YT_END - 0.08) {
@@ -55,7 +57,6 @@ function onYouTubeIframeAPIReady() {
     },
   });
 }
-
 
 // ---------------------------------------------------------
 // CONTACT EMAIL + PHONE
@@ -76,7 +77,6 @@ if (footerTel) {
   footerTel.textContent = "+420 123 456 789";
 }
 
-
 // ---------------------------------------------------------
 // SMOOTH SCROLL LINKS
 // ---------------------------------------------------------
@@ -90,7 +90,6 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
   });
 });
 
-
 // ---------------------------------------------------------
 // HERO BUTTON → scroll k #intro
 // ---------------------------------------------------------
@@ -103,7 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
 
 // ---------------------------------------------------------
 // HEADER HIDE/SHOW ON SCROLL
@@ -130,7 +128,6 @@ header.addEventListener("mouseenter", () => {
   header.classList.remove("hidden");
 });
 
-
 // ---------------------------------------------------------
 // SCROLL TO TOP WHEN CLICKING LOGO
 // ---------------------------------------------------------
@@ -141,8 +138,6 @@ if (topBtn) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 }
-
-
 
 // ---------------------------------------------------------
 // TIMELINE LINE (SVG) – postupné kreslení čáry
@@ -181,7 +176,6 @@ function animateTimelineLine() {
 document.addEventListener("DOMContentLoaded", animateTimelineLine);
 window.addEventListener("scroll", animateTimelineLine);
 window.addEventListener("resize", animateTimelineLine);
-
 
 // ---------------------------------------------------------
 // TIMELINE FADE-IN jednotlivých bloků
