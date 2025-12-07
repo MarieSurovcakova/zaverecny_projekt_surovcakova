@@ -858,13 +858,7 @@ h5 {
   .footer-center {
     gap: 4rem;
   }
-}
-
-/* =========================================
-   976px – vypnout timeline linku
-========================================= */
-@media (max-width: 976px) {
-  .timeline-line-svg,
+.timeline-line-svg,
   .timeline-line {
     display: none !important;
   }
