@@ -4,9 +4,10 @@
 const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-// ---------------------------------------------------------
+
+// =========================================================
 // YOUTUBE BACKGROUND VIDEO
-// ---------------------------------------------------------
+// =========================================================
 const VIDEO_ID = "XX2gZTGwZWc";
 const YT_START = 12;
 const YT_END = 19;
@@ -46,6 +47,7 @@ function onYouTubeIframeAPIReady() {
         if (e.data === YT.PlayerState.PLAYING) {
           document.body.classList.add("loaded");
         }
+
         if (e.data === YT.PlayerState.PLAYING && !loopTick) {
           loopTick = setInterval(() => {
             if (player.getCurrentTime() >= YT_END - 0.08) {
@@ -53,14 +55,15 @@ function onYouTubeIframeAPIReady() {
             }
           }, 100);
         }
-      },
-    },
+      }
+    }
   });
 }
 
-// ---------------------------------------------------------
+
+// =========================================================
 // CONTACT EMAIL + PHONE
-// ---------------------------------------------------------
+// =========================================================
 const EMAIL = "marie.surovcakova@domena.cz";
 const TEL = "+420123456789";
 
@@ -77,9 +80,10 @@ if (footerTel) {
   footerTel.textContent = "+420 123 456 789";
 }
 
-// ---------------------------------------------------------
-// SMOOTH SCROLL LINKS
-// ---------------------------------------------------------
+
+// =========================================================
+// SMOOTH SCROLL
+// =========================================================
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
   link.addEventListener("click", (e) => {
     const target = document.querySelector(link.getAttribute("href"));
@@ -90,9 +94,10 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
   });
 });
 
-// ---------------------------------------------------------
-// HERO BUTTON → scroll k #intro
-// ---------------------------------------------------------
+
+// =========================================================
+// HERO SCROLL BUTTON
+// =========================================================
 document.addEventListener("DOMContentLoaded", () => {
   const scrollButton = document.querySelector(".scroll");
   if (scrollButton) {
@@ -103,9 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// ---------------------------------------------------------
+
+// =========================================================
 // HEADER HIDE/SHOW ON SCROLL
-// ---------------------------------------------------------
+// =========================================================
 let lastScroll = 0;
 const header = document.querySelector(".site-header");
 
@@ -128,9 +134,10 @@ header.addEventListener("mouseenter", () => {
   header.classList.remove("hidden");
 });
 
-// ---------------------------------------------------------
-// SCROLL TO TOP WHEN CLICKING LOGO
-// ---------------------------------------------------------
+
+// =========================================================
+// LOGO SCROLL TO TOP
+// =========================================================
 const topBtn = document.getElementById("top");
 if (topBtn) {
   topBtn.addEventListener("click", (e) => {
@@ -139,9 +146,10 @@ if (topBtn) {
   });
 }
 
-// ---------------------------------------------------------
-// TIMELINE LINE (SVG) – postupné kreslení čáry
-// ---------------------------------------------------------
+
+// =========================================================
+// TIMELINE LINE ANIMATION
+// =========================================================
 function animateTimelineLine() {
   const svg = document.querySelector(".timeline-line-svg");
   const line = document.querySelector(".timeline-line");
@@ -152,24 +160,20 @@ function animateTimelineLine() {
   const svgRect = svg.getBoundingClientRect();
   const itemRect = firstItem.getBoundingClientRect();
 
-  // Čára začíná u prvního timeline bloku (20 % odshora)
   const startY = itemRect.top - svgRect.top + itemRect.height * 0.2;
 
   line.setAttribute("y1", startY);
   line.setAttribute("y2", svgRect.height);
 
-  // délka čáry
   const length = line.getTotalLength();
   line.style.strokeDasharray = length;
 
-  // vypočítáme, jak moc sekce vstoupila do viewportu
   const windowH = window.innerHeight;
   const visible = Math.min(
     1,
     Math.max(0, (windowH - svgRect.top) / (windowH + svgRect.height))
   );
 
-  // čára se kreslí podle scrollu
   line.style.strokeDashoffset = length * (1 - visible);
 }
 
@@ -177,65 +181,50 @@ document.addEventListener("DOMContentLoaded", animateTimelineLine);
 window.addEventListener("scroll", animateTimelineLine);
 window.addEventListener("resize", animateTimelineLine);
 
-// ---------------------------------------------------------
-// TIMELINE FADE-IN jednotlivých bloků
-// ---------------------------------------------------------
+// =========================================================
+// UNIVERSAL REVEAL – stejné chování jako timeline (po částech)
+// =========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  const items = document.querySelectorAll(".tl-item");
+
+  // Vše, co má fade-in / slide reveal
+  const revealItems = document.querySelectorAll(
+    ".reveal-section, .reveal-center, .tl-item"
+  );
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+
+          // Přidáme "visible" až když element opravdu vstoupí do view
           entry.target.classList.add("visible");
+
+          // přestat pozorovat – animace se nespouští znovu
           observer.unobserve(entry.target);
         }
       });
     },
-    { threshold: 0.2 }
+    {
+      threshold: 0.15,        // 15 % elementu musí být vidět
+      rootMargin: "0px 0px -10%"  // start animace o trochu dříve
+    }
   );
 
-  items.forEach((item) => observer.observe(item));
+  revealItems.forEach((item) => observer.observe(item));
 });
 
-// ---------------------------------------------------------
-// REVEAL celé sekce "Můj příběh"
-// ---------------------------------------------------------
+
+
+// =========================================================
+// HAMBURGER MENU (pouze do 400px, ale JS necháváme globálně)
+// =========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  const section = document.querySelector(".reveal-section");
-  if (!section) return;
+  const hamburger = document.querySelector(".hamburger");
+  const navList = document.querySelector(".nav__list");
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          section.classList.add("visible");
-          observer.unobserve(section);
-        }
-      });
-    },
-    { threshold: 0.2 }
-  );
-
-  observer.observe(section);
-});
-
-// ---------------------------------------------------------
-// ANIMACE
-// ---------------------------------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-  const elements = document.querySelectorAll(".reveal-center");
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
-        }
-      });
-    },
-    { threshold: 0.5 }
-  );
-
-  elements.forEach((el) => observer.observe(el));
+  if (hamburger && navList) {
+    hamburger.addEventListener("click", () => {
+      navList.classList.toggle("open");
+    });
+  }
 });
