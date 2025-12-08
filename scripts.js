@@ -205,8 +205,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     },
     {
-      threshold: 0.15,        // 15 % elementu musí být vidět
-      rootMargin: "0px 0px -10%"  // start animace o trochu dříve
+      threshold: 0.15,
+      rootMargin: "0px 0px -10%"
     }
   );
 
@@ -221,10 +221,19 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.querySelector(".hamburger");
   const navList = document.querySelector(".nav__list");
+  const navLinks = document.querySelectorAll(".nav__list a");
 
   if (hamburger && navList) {
+
     hamburger.addEventListener("click", () => {
       navList.classList.toggle("open");
     });
+
+    navLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        navList.classList.remove("open");
+      });
+    });
   }
 });
+
