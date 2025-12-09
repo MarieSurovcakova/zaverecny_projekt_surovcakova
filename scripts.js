@@ -158,7 +158,7 @@ window.addEventListener("scroll", () => {
       header.classList.add("hidden");
       header.classList.remove("show");
       headerHidden = true;
-    }, 2000);
+    }, 600);
   }
 
   lastScrollY = current;
