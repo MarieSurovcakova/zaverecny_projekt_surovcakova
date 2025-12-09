@@ -21,9 +21,6 @@
 /* =========================================
    GLOBAL RESET & TYPOGRAPHY
 ========================================= */
-* {
-  box-sizing: border-box;
-}
 
 body {
   margin: 0;
@@ -153,14 +150,14 @@ h5 {
 
 /* Footer variant of brand */
 .brand--muted {
-  width: auto !important;
-  height: auto !important;
-  display: inline-flex !important;
+  width: auto;
+  height: auto;
+  display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   padding: 0;
-  background: transparent !important;
-  border-radius: 0 !important;
+  background: transparent;
+  border-radius: 0;
   color: #fff;
   font-weight: 600;
   letter-spacing: 0;
@@ -293,7 +290,7 @@ h5 {
   border: 2px solid white;
   border-radius: 50%;
   position: relative;
-  animation: down 1.5s infinite;
+  animation: down 3s infinite;
   cursor: pointer;
 }
 
@@ -446,6 +443,7 @@ h5 {
 .tl-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-top: 40px;
   opacity: 0;
   transform: translateY(40px);
@@ -604,7 +602,7 @@ h5 {
 }
 
 .contact__cta {
-  margin: 26px 0 18px;
+  margin: 50px 0 20px;
   display: flex;
   justify-content: center;
 }
@@ -674,6 +672,7 @@ h5 {
   background: linear-gradient(#6937cc, var(--violet-2));
   color: #fff;
   padding: 14px 0;
+  font-weight: 600;
 }
 
 .footer__in {
@@ -683,7 +682,6 @@ h5 {
   gap: 24px;
   flex-wrap: wrap;
 }
-
 
 .footer-left {
   display: flex;
@@ -742,31 +740,27 @@ h5 {
    1287px – footer stack
 ========================================= */
 @media (max-width: 1287px) {
-
- 
-.footer__in {
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding-top: 10px;
-  gap: 25px;
-  flex-wrap: nowrap;
+  .footer__in {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 10px;
+    gap: 25px;
+    flex-wrap: nowrap;
   }
 
-.brand--muted {
-  width: auto;
-  display: block;
-  line-height: 1;
-  padding: 0;
-  background: transparent;
-  border-radius: 0 ;
-  color: #fff;
-  font-weight: 600;
-  letter-spacing: 0;
-  white-space: nowrap;
-}
-
-
+  .brand--muted {
+    width: auto;
+    display: block;
+    line-height: 1;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
   .footer-left {
     display: flex;
     align-items: center;
@@ -795,14 +789,13 @@ h5 {
     min-height: 0;
   }
 
-    .footer-right {
+  .footer-right {
     display: flex;
     justify-content: center;
     align-items: center;
     width: auto;
     min-height: 0;
   }
-
 
   .footer-center {
     gap: 40px;
@@ -821,7 +814,6 @@ h5 {
     padding-inline: 8px;
   }
 }
-
 
 /* =========================================
    1100px
@@ -858,9 +850,9 @@ h5 {
   .footer-center {
     gap: 4rem;
   }
-.timeline-line-svg,
+  .timeline-line-svg,
   .timeline-line {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -882,7 +874,7 @@ h5 {
   }
 
   .tl-item {
-    flex-direction: column !important;
+    flex-direction: column;
     text-align: center;
     gap: 24px;
   }
@@ -1012,7 +1004,6 @@ h5 {
     gap: 25px;
   }
 
-
   .footer-right {
     margin-left: 0;
     justify-content: center;
@@ -1036,11 +1027,7 @@ h5 {
   }
 }
 
-/* =========================================
-   400px — hamburger menu
-========================================= */
-@media (max-width: 400px) {
-  /* Zobrazíme hamburger */
+@media (max-width: 440px) {
   .hamburger {
     display: block;
     background: none;
@@ -1050,37 +1037,76 @@ h5 {
     cursor: pointer;
     order: 3;
     line-height: 1;
-    margin-left: auto; /* zarovnání doprava */
+    margin-left: auto;
   }
-
-  .header__in {
-    padding-inline: 16px;
-  }
-
-  /* Mobilní menu */
   .nav__list {
-    display: none;
     flex-direction: column;
     gap: 1.4rem;
     background: linear-gradient(#6937cc, var(--violet-2));
-    padding: 20px 0 26px;
     position: absolute;
     top: var(--header-h);
     left: 0;
     right: 0;
     text-align: center;
     z-index: 999;
+
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
   }
 
   .nav__list.open {
-    display: flex;
+    animation: openMenu 0.3s ease forwards;
   }
-   .footer__in {
+
+  .nav__list.closing {
+    animation: closeMenu 0.3s ease forwards;
+  }
+
+  @keyframes openMenu {
+    0% {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-10px);
+      padding: 0;
+    }
+    100% {
+      max-height: 300px;
+      opacity: 1;
+      transform: translateY(0);
+      padding: 20px 0 26px;
+    }
+  }
+
+  @keyframes closeMenu {
+    0% {
+      max-height: 300px;
+      opacity: 1;
+      transform: translateY(0);
+      padding: 20px 0 26px;
+    }
+    100% {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-10px);
+      padding: 0;
+    }
+  }
+}
+
+/* =========================================
+   400px — hamburger menu
+========================================= */
+@media (max-width: 400px) {
+  .header__in {
+    padding-inline: 16px;
+  }
+  .footer__in {
     flex-direction: column;
     gap: 18px;
     padding-inline: 10px;
   }
-.footer-center{
+  .footer-center {
     gap: 20px;
   }
 }
@@ -1181,7 +1207,7 @@ h5 {
     gap: 18px;
     padding-inline: 10px;
   }
-.footer-center{
+  .footer-center {
     gap: 20px;
   }
   .social-icon {
@@ -1205,12 +1231,12 @@ h5 {
   h2 {
     font-size: 1.15rem;
   }
- .footer__in {
+  .footer__in {
     flex-direction: column;
     gap: 18px;
     padding-inline: 10px;
   }
-.footer-center{
+  .footer-center {
     gap: 20px;
   }
   .tl-img,
