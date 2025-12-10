@@ -4,7 +4,6 @@
 const yearEl = document.getElementById("year");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-
 // =========================================================
 // YOUTUBE BACKGROUND VIDEO
 // =========================================================
@@ -55,11 +54,10 @@ function onYouTubeIframeAPIReady() {
             }
           }, 100);
         }
-      }
-    }
+      },
+    },
   });
 }
-
 
 // =========================================================
 // CONTACT EMAIL + PHONE
@@ -80,7 +78,6 @@ if (footerTel) {
   footerTel.textContent = "+420 123 456 789";
 }
 
-
 // =========================================================
 // SMOOTH SCROLL
 // =========================================================
@@ -93,7 +90,6 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
     }
   });
 });
-
 
 // =========================================================
 // HERO SCROLL BUTTON
@@ -119,6 +115,8 @@ let hideTimeout = null;
 let currentDirection = null;
 let headerHidden = false;
 
+header.isHovered = false;
+
 window.addEventListener("scroll", () => {
   const current = window.scrollY;
 
@@ -141,9 +139,11 @@ window.addEventListener("scroll", () => {
   }
 
   const newDirection =
-    current > lastScrollY ? "down" :
-    current < lastScrollY ? "up" :
-    currentDirection;
+    current > lastScrollY
+      ? "down"
+      : current < lastScrollY
+      ? "up"
+      : currentDirection;
 
   if (newDirection !== currentDirection) {
     currentDirection = newDirection;
@@ -155,86 +155,101 @@ window.addEventListener("scroll", () => {
     clearTimeout(hideTimeout);
 
     hideTimeout = setTimeout(() => {
-      header.classList.add("hidden");
-      header.classList.remove("show");
-      headerHidden = true;
-    }, 600);
+      const now = window.scrollY;
+      const nowHeroHalf = hero ? hero.offsetHeight / 2 : 0;
+      if (now >= nowHeroHalf && !header.isHovered) {
+        header.classList.add("hidden");
+        header.classList.remove("show");
+        headerHidden = true;
+      }
+    }, 2000);
   }
 
   lastScrollY = current;
 });
 
 header.addEventListener("mouseenter", () => {
+  clearTimeout(hideTimeout);
   header.classList.add("show");
   header.classList.remove("hidden");
   headerHidden = false;
+  header.isHovered = true;
+});
+
+header.addEventListener("mouseleave", () => {
+  header.isHovered = false;
   clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(() => {
+    const now = window.scrollY;
+    const nowHeroHalf = hero ? hero.offsetHeight / 2 : 0;
+    if (now >= nowHeroHalf && !header.isHovered) {
+      header.classList.add("hidden");
+      header.classList.remove("show");
+      headerHidden = true;
+    }
+  }, 2000);
 });
 
 // =========================================================
 // HIDE HEADER ON HEADER LINK CLICK
 // =========================================================
-const headerLinks = document.querySelectorAll('.site-header a[href^="#"]');
+document.querySelectorAll('a[href^="#"]').forEach((link) => {
+  link.addEventListener("click", (e) => {
+    const href = link.getAttribute("href");
 
-headerLinks.forEach(link => {
-  link.addEventListener("click", () => {
-    header.classList.add("hidden");
-    header.classList.remove("show");
+    // speciální případ: scroll úplně nahoru
+    if (href === "#" || href === "#top") {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    const target = document.querySelector(href);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: "smooth" });
+    }
   });
 });
 
+// // =========================================================
+// // TIMELINE LINE ANIMATION
+// // =========================================================
+// function animateTimelineLine() {
+//   const svg = document.querySelector(".timeline-line-svg");
+//   const line = document.querySelector(".timeline-line");
+//   const firstItem = document.querySelector(".tl-item");
 
-// =========================================================
-// LOGO SCROLL TO TOP
-// =========================================================
-const topBtn = document.getElementById("top");
-if (topBtn) {
-  topBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-}
+//   if (!svg || !line || !firstItem) return;
 
+//   const svgRect = svg.getBoundingClientRect();
+//   const itemRect = firstItem.getBoundingClientRect();
 
-// =========================================================
-// TIMELINE LINE ANIMATION
-// =========================================================
-function animateTimelineLine() {
-  const svg = document.querySelector(".timeline-line-svg");
-  const line = document.querySelector(".timeline-line");
-  const firstItem = document.querySelector(".tl-item");
+//   const startY = itemRect.top - svgRect.top + itemRect.height * 0.2;
 
-  if (!svg || !line || !firstItem) return;
+//   line.setAttribute("y1", startY);
+//   line.setAttribute("y2", svgRect.height);
 
-  const svgRect = svg.getBoundingClientRect();
-  const itemRect = firstItem.getBoundingClientRect();
+//   const length = line.getTotalLength();
+//   line.style.strokeDasharray = length;
 
-  const startY = itemRect.top - svgRect.top + itemRect.height * 0.2;
+//   const windowH = window.innerHeight;
+//   const visible = Math.min(
+//     1,
+//     Math.max(0, (windowH - svgRect.top) / (windowH + svgRect.height))
+//   );
 
-  line.setAttribute("y1", startY);
-  line.setAttribute("y2", svgRect.height);
+//   line.style.strokeDashoffset = length * (1 - visible);
+// }
 
-  const length = line.getTotalLength();
-  line.style.strokeDasharray = length;
-
-  const windowH = window.innerHeight;
-  const visible = Math.min(
-    1,
-    Math.max(0, (windowH - svgRect.top) / (windowH + svgRect.height))
-  );
-
-  line.style.strokeDashoffset = length * (1 - visible);
-}
-
-document.addEventListener("DOMContentLoaded", animateTimelineLine);
-window.addEventListener("scroll", animateTimelineLine);
-window.addEventListener("resize", animateTimelineLine);
+// document.addEventListener("DOMContentLoaded", animateTimelineLine);
+// window.addEventListener("scroll", animateTimelineLine);
+// window.addEventListener("resize", animateTimelineLine);
 
 // =========================================================
 // UNIVERSAL REVEAL – stejné chování jako timeline (po částech)
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
-
   // Vše, co má fade-in / slide reveal
   const revealItems = document.querySelectorAll(
     ".reveal-section, .reveal-center, .tl-item"
@@ -244,25 +259,20 @@ document.addEventListener("DOMContentLoaded", () => {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-
-          // Přidáme "visible" až když element opravdu vstoupí do view
           entry.target.classList.add("visible");
 
-          // přestat pozorovat – animace se nespouští znovu
           observer.unobserve(entry.target);
         }
       });
     },
     {
       threshold: 0.15,
-      rootMargin: "0px 0px -10%"
+      rootMargin: "0px 0px -10%",
     }
   );
 
   revealItems.forEach((item) => observer.observe(item));
 });
-
-
 
 // =========================================================
 // HAMBURGER MENU (pouze do 400px
@@ -273,12 +283,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelectorAll(".nav__list a");
 
   if (hamburger && navList) {
-
     hamburger.addEventListener("click", () => {
       navList.classList.toggle("open");
     });
 
-    navLinks.forEach(link => {
+    navLinks.forEach((link) => {
       link.addEventListener("click", () => {
         navList.classList.remove("open");
       });
