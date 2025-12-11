@@ -292,7 +292,7 @@ h5 {
   border: 3px solid white;
   border-radius: 50%;
   position: relative;
-  animation: down 3s infinite;
+  animation: down 1.7s infinite;
   cursor: pointer;
   align-items: center;
   justify-content: center;
